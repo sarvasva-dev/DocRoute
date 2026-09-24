@@ -1,0 +1,38 @@
+[
+  {
+    "source_project": "BulkBeat TV / nse2",
+    "source_file": "d:/Projects/nse2/nse_monitor/pdf_processor.py",
+    "function_class": "PDFProcessor.extract_text",
+    "technology": "PyMuPDF (fitz)",
+    "actual_usage": "Iterates through PDF pages using fitz.open(pdf_path) and page.get_text() to aggregate text across all pages.",
+    "reusable_logic": "Native text extraction using PyMuPDF page iterator and text aggregation.",
+    "notes": "Verified import fitz. Serves as primary extraction step before fallback."
+  },
+  {
+    "source_project": "BulkBeat TV / nse2",
+    "source_file": "d:/Projects/nse2/nse_monitor/pdf_processor.py",
+    "function_class": "PDFProcessor._extract_text_ocr",
+    "technology": "PyMuPDF (fitz) + PIL + pytesseract",
+    "actual_usage": "Triggered when extracted native text is < 150 characters. Renders pages to 200 DPI JPEG pixmaps using PyMuPDF and processes images using pytesseract.image_to_string with threading.Lock concurrency control.",
+    "reusable_logic": "Image rendering from PDF at 200 DPI, memory management with explicit GC collect, length-based heuristic fallback (<150 chars), thread locking for RAM safety on constrained environments.",
+    "notes": "Verified imports: fitz, pytesseract, PIL.Image, threading, gc."
+  },
+  {
+    "source_project": "Tender automation",
+    "source_file": "d:/Projects/Tender automation/azure-backend/document_processing/pdf_extractor.py",
+    "function_class": "PyMuPDFExtractor.extract_text_with_pages",
+    "technology": "PyMuPDF (fitz)",
+    "actual_usage": "Extracts page-by-page text returning structured list of dicts [{'page': page_num + 1, 'text': text.strip()}].",
+    "reusable_logic": "Page-indexed structured output dictionary.",
+    "notes": "Verified import fitz."
+  },
+  {
+    "source_project": "Tender automation",
+    "source_file": "d:/Projects/Tender automation/azure-backend/document_processing/ocr_engine.py",
+    "function_class": "OCREngine.extract_text_with_pages",
+    "technology": "PaddleOCR",
+    "actual_usage": "Initializes PaddleOCR(use_angle_cls=True, lang='en') with graceful fallback if PaddleOCR is not installed.",
+    "reusable_logic": "Page-indexed OCR output abstraction and optional secondary OCR backend pattern.",
+    "notes": "Verified optional import paddleocr."
+  }
+]
