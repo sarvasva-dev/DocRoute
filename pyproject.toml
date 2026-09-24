@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "DocRoute: Adaptive Document Intelligence Engine"
 readme = "README.md"
 requires-python = ">=3.10"
-license = {text = "MIT"}
+license = "MIT"
 authors = [
     {name = "Sarvasva", email = "dev@example.com"}
 ]
@@ -26,6 +26,19 @@ dependencies = [
 
 [project.scripts]
 docroute = "docroute.cli.main:main"
+
+[tool.setuptools]
+packages = [
+    "docroute",
+    "docroute.core",
+    "docroute.extractors",
+    "docroute.ocr",
+    "docroute.routing",
+    "docroute.provenance",
+    "docroute.models",
+    "docroute.api",
+    "docroute.cli"
+]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

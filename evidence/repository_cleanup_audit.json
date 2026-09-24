@@ -1,0 +1,537 @@
+[
+  {
+    "path": ".gitignore",
+    "size_bytes": 225,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "pyproject.toml",
+    "size_bytes": 709,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "README.md",
+    "size_bytes": 6422,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": ".pytest_cache\\.gitignore",
+    "size_bytes": 39,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": ".pytest_cache\\CACHEDIR.TAG",
+    "size_bytes": 191,
+    "category": "CACHE"
+  },
+  {
+    "path": ".pytest_cache\\README.md",
+    "size_bytes": 310,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": ".pytest_cache\\v\\cache\\lastfailed",
+    "size_bytes": 2,
+    "category": "CACHE"
+  },
+  {
+    "path": ".pytest_cache\\v\\cache\\nodeids",
+    "size_bytes": 965,
+    "category": "CACHE"
+  },
+  {
+    "path": "docroute\\benchmark.py",
+    "size_bytes": 5519,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\__main__.py",
+    "size_bytes": 122,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\api\\app.py",
+    "size_bytes": 1269,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\api\\routes.py",
+    "size_bytes": 7531,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\api\\__init__.py",
+    "size_bytes": 94,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\api\\__pycache__\\app.cpython-310.pyc",
+    "size_bytes": 1399,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\api\\__pycache__\\routes.cpython-310.pyc",
+    "size_bytes": 6322,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\api\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 256,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\cli\\main.py",
+    "size_bytes": 5567,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\cli\\__init__.py",
+    "size_bytes": 97,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\cli\\__pycache__\\main.cpython-310.pyc",
+    "size_bytes": 5097,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\cli\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 258,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\core\\engine.py",
+    "size_bytes": 8419,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\core\\profiler.py",
+    "size_bytes": 8370,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\core\\__init__.py",
+    "size_bytes": 193,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\core\\__pycache__\\engine.cpython-310.pyc",
+    "size_bytes": 6181,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\core\\__pycache__\\profiler.cpython-310.pyc",
+    "size_bytes": 4813,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\core\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 343,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\base.py",
+    "size_bytes": 836,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\native.py",
+    "size_bytes": 3996,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\ocr.py",
+    "size_bytes": 5410,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\tables.py",
+    "size_bytes": 3452,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\__init__.py",
+    "size_bytes": 365,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\__pycache__\\base.cpython-310.pyc",
+    "size_bytes": 1289,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\__pycache__\\native.cpython-310.pyc",
+    "size_bytes": 2878,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\__pycache__\\ocr.cpython-310.pyc",
+    "size_bytes": 4260,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\__pycache__\\tables.cpython-310.pyc",
+    "size_bytes": 3002,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\extractors\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 501,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\api.py",
+    "size_bytes": 1288,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\document.py",
+    "size_bytes": 726,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\extraction.py",
+    "size_bytes": 847,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\profile.py",
+    "size_bytes": 2298,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\provenance.py",
+    "size_bytes": 1135,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\quality.py",
+    "size_bytes": 1204,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\table.py",
+    "size_bytes": 1591,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__init__.py",
+    "size_bytes": 563,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\api.cpython-310.pyc",
+    "size_bytes": 1959,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\document.cpython-310.pyc",
+    "size_bytes": 1083,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\extraction.cpython-310.pyc",
+    "size_bytes": 1178,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\profile.cpython-310.pyc",
+    "size_bytes": 2661,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\provenance.cpython-310.pyc",
+    "size_bytes": 1427,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\quality.cpython-310.pyc",
+    "size_bytes": 1520,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\table.cpython-310.pyc",
+    "size_bytes": 1941,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\models\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 676,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\ocr\\preprocessing.py",
+    "size_bytes": 3996,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\ocr\\tesseract.py",
+    "size_bytes": 5512,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\ocr\\__init__.py",
+    "size_bytes": 208,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\ocr\\__pycache__\\preprocessing.cpython-310.pyc",
+    "size_bytes": 3902,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\ocr\\__pycache__\\tesseract.cpython-310.pyc",
+    "size_bytes": 4734,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\ocr\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 352,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\provenance\\tracker.py",
+    "size_bytes": 2262,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\provenance\\__init__.py",
+    "size_bytes": 140,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\provenance\\__pycache__\\tracker.cpython-310.pyc",
+    "size_bytes": 2645,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\provenance\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 295,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\routing\\quality.py",
+    "size_bytes": 3924,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\routing\\router.py",
+    "size_bytes": 3063,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\routing\\__init__.py",
+    "size_bytes": 189,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\routing\\__pycache__\\quality.cpython-310.pyc",
+    "size_bytes": 3674,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\routing\\__pycache__\\router.cpython-310.pyc",
+    "size_bytes": 2595,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\routing\\__pycache__\\__init__.cpython-310.pyc",
+    "size_bytes": 348,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\__pycache__\\benchmark.cpython-310.pyc",
+    "size_bytes": 5058,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docroute\\__pycache__\\__main__.cpython-310.pyc",
+    "size_bytes": 282,
+    "category": "SOURCE_CODE"
+  },
+  {
+    "path": "docs\\architecture.md",
+    "size_bytes": 2883,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": "docs\\benchmark.md",
+    "size_bytes": 1893,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": "docs\\bulkbeat-integration.md",
+    "size_bytes": 3298,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": "docs\\research.md",
+    "size_bytes": 9616,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": "evidence\\project_docroute.json",
+    "size_bytes": 3134,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": "evidence\\reusable_document_processing.json",
+    "size_bytes": 2303,
+    "category": "DOCUMENTATION"
+  },
+  {
+    "path": "tessdata\\eng.traineddata",
+    "size_bytes": 4113088,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\eng.user-patterns",
+    "size_bytes": 33,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\eng.user-words",
+    "size_bytes": 27,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\hin.traineddata",
+    "size_bytes": 1122751,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\jaxb-api-2.3.1.jar",
+    "size_bytes": 128076,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\osd.traineddata",
+    "size_bytes": 10562727,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\pdf.ttf",
+    "size_bytes": 572,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\piccolo2d-core-3.0.1.jar",
+    "size_bytes": 125187,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\piccolo2d-extras-3.0.1.jar",
+    "size_bytes": 149558,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tessdata\\ScrollView.jar",
+    "size_bytes": 26376,
+    "category": "OPTIONAL_ASSET"
+  },
+  {
+    "path": "tests\\create_benchmark_dataset.py",
+    "size_bytes": 5355,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_api.py",
+    "size_bytes": 1634,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_cli.py",
+    "size_bytes": 1848,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_extractors.py",
+    "size_bytes": 1614,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_integration.py",
+    "size_bytes": 1369,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_profiler.py",
+    "size_bytes": 1185,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_provenance.py",
+    "size_bytes": 1034,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_routing.py",
+    "size_bytes": 1860,
+    "category": "TEST_CODE"
+  },
+  {
+    "path": "tests\\test_data\\hindi_doc.pdf",
+    "size_bytes": 875,
+    "category": "GENERATED_TEST_DATA"
+  },
+  {
+    "path": "tests\\test_data\\mixed_document.pdf",
+    "size_bytes": 2404138,
+    "category": "GENERATED_TEST_DATA"
+  },
+  {
+    "path": "tests\\test_data\\native_text.pdf",
+    "size_bytes": 1180,
+    "category": "GENERATED_TEST_DATA"
+  },
+  {
+    "path": "tests\\test_data\\poor_quality_scan.pdf",
+    "size_bytes": 2403575,
+    "category": "GENERATED_TEST_DATA"
+  },
+  {
+    "path": "tests\\test_data\\scanned_page.pdf",
+    "size_bytes": 2403575,
+    "category": "GENERATED_TEST_DATA"
+  },
+  {
+    "path": "tests\\test_data\\table_heavy.pdf",
+    "size_bytes": 5009,
+    "category": "GENERATED_TEST_DATA"
+  },
+  {
+    "path": "tests\\__pycache__\\test_api.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 4074,
+    "category": "CACHE"
+  },
+  {
+    "path": "tests\\__pycache__\\test_cli.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 4297,
+    "category": "CACHE"
+  },
+  {
+    "path": "tests\\__pycache__\\test_extractors.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 5646,
+    "category": "CACHE"
+  },
+  {
+    "path": "tests\\__pycache__\\test_integration.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 4428,
+    "category": "CACHE"
+  },
+  {
+    "path": "tests\\__pycache__\\test_profiler.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 3873,
+    "category": "CACHE"
+  },
+  {
+    "path": "tests\\__pycache__\\test_provenance.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 2409,
+    "category": "CACHE"
+  },
+  {
+    "path": "tests\\__pycache__\\test_routing.cpython-310-pytest-9.0.2.pyc",
+    "size_bytes": 3919,
+    "category": "CACHE"
+  }
+]

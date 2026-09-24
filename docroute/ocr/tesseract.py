@@ -1,6 +1,7 @@
 """Tesseract OCR Integration Wrapper for DocRoute."""
 import os
 import sys
+import shutil
 import logging
 from typing import Dict, Any, List, Optional, Tuple
 import pytesseract
@@ -9,36 +10,46 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
-# System and Local Tesseract Binary Paths
+# Standard System Binary Fallbacks (Windows/POSIX)
 STANDARD_TESSERACT_PATHS = [
     r"C:\Program Files\Tesseract-OCR\tesseract.exe",
     r"C:\Program Files (x86)\Tesseract-OCR\tesseract.exe",
     r"C:\ProgramData\chocolatey\bin\tesseract.exe",
+    "/usr/bin/tesseract",
+    "/usr/local/bin/tesseract",
+    "/opt/homebrew/bin/tesseract"
 ]
 
-# Local Project Tessdata Path
-LOCAL_TESSDATA_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "tessdata"))
-
 class TesseractOCREngine:
-    """Wrapper class for executing Tesseract OCR with localized tessdata and binary resolution."""
+    """Portable wrapper class for Tesseract OCR execution with configurable binary and language resolution."""
 
     def __init__(self, tesseract_cmd: Optional[str] = None, tessdata_dir: Optional[str] = None):
-        """Initializes Tesseract engine and verifies binary & language configuration."""
-        self.tesseract_cmd = tesseract_cmd or self._find_tesseract_binary()
-        if self.tesseract_cmd and os.path.exists(self.tesseract_cmd):
+        """Initializes Tesseract engine using environment variables TESSERACT_CMD/TESSDATA_PREFIX or system defaults."""
+        env_cmd = os.environ.get("TESSERACT_CMD")
+        self.tesseract_cmd = tesseract_cmd or env_cmd or self._find_tesseract_binary()
+
+        if self.tesseract_cmd:
             pytesseract.pytesseract.tesseract_cmd = self.tesseract_cmd
 
-        self.tessdata_dir = tessdata_dir or (LOCAL_TESSDATA_DIR if os.path.exists(LOCAL_TESSDATA_DIR) else None)
+        env_tessdata = os.environ.get("TESSDATA_PREFIX")
+        self.tessdata_dir = tessdata_dir or env_tessdata
+
         self.is_available = self._check_availability()
 
     def _find_tesseract_binary(self) -> Optional[str]:
-        """Locates tesseract executable on Windows system or environment PATH."""
+        """Locates tesseract executable via PATH or standard system installation directories."""
+        # 1. Check PATH
+        which_path = shutil.which("tesseract")
+        if which_path:
+            return which_path
+
+        # 2. Check standard system paths
         for path in STANDARD_TESSERACT_PATHS:
             if os.path.exists(path):
                 return path
+
         try:
-            # Check if tesseract is in PATH
-            ver = pytesseract.get_tesseract_version()
+            pytesseract.get_tesseract_version()
             return "tesseract"
         except Exception:
             return None
@@ -46,11 +57,14 @@ class TesseractOCREngine:
     def _check_availability(self) -> bool:
         """Verifies if Tesseract OCR binary executes cleanly."""
         try:
-            pytesseract.get_tesseract_version()
-            logger.info(f"Tesseract OCR binary verified: {pytesseract.pytesseract.tesseract_cmd}")
+            ver = pytesseract.get_tesseract_version()
+            logger.info(f"Tesseract OCR binary verified: {pytesseract.pytesseract.tesseract_cmd} (v{ver})")
             return True
         except Exception as e:
-            logger.warning(f"Tesseract OCR not available: {e}")
+            logger.warning(
+                f"Tesseract OCR is not available on system PATH or configured TESSERACT_CMD. "
+                f"OCR features will fallback to empty results. Error: {e}"
+            )
             return False
 
     def get_supported_languages(self) -> List[str]:
@@ -58,11 +72,11 @@ class TesseractOCREngine:
         if not self.is_available:
             return []
         try:
+            config = ""
             if self.tessdata_dir and os.path.exists(self.tessdata_dir):
                 os.environ["TESSDATA_PREFIX"] = self.tessdata_dir
-                config = f'--tessdata-dir {self.tessdata_dir}'
-            else:
-                config = ""
+                config = f'--tessdata-dir "{self.tessdata_dir}"'
+            
             langs = pytesseract.get_languages(config=config)
             return langs
         except Exception as e:
@@ -83,6 +97,7 @@ class TesseractOCREngine:
             Tuple of (extracted_text, average_confidence, word_boxes)
         """
         if not self.is_available:
+            logger.warning("OCR requested but Tesseract engine is unavailable on system.")
             return "", 0.0, []
 
         try:
@@ -94,7 +109,7 @@ class TesseractOCREngine:
             config_parts = [f"--psm {psm}"]
             if self.tessdata_dir and os.path.exists(self.tessdata_dir):
                 os.environ["TESSDATA_PREFIX"] = self.tessdata_dir
-                config_parts.append(f'--tessdata-dir {self.tessdata_dir}')
+                config_parts.append(f'--tessdata-dir "{self.tessdata_dir}"')
             config_str = " ".join(config_parts)
 
             # Check if requested language is available, fallback to eng if missing

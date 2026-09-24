@@ -1,19 +1,37 @@
+# Python cache & bytecode
 __pycache__/
-*.pyc
-*.pyo
-*.pyd
+*.py[cod]
+*$py.class
+
+# Pytest & Coverage
 .pytest_cache/
 .coverage
 htmlcov/
-*.egg-info/
-dist/
-build/
+.mypy_cache/
+.ruff_cache/
+
+# Environments & IDEs
 .venv/
-env/
 venv/
-.idea/
+env/
+.env
+.env.*
 .vscode/
-tessdata/*.traineddata
-!tessdata/eng.traineddata
-!tessdata/hin.traineddata
-!tessdata/osd.traineddata
+.idea/
+
+# Local Generated Data & Benchmark Artifacts (GITIGNORED)
+tests/_generated/
+tests/test_data/
+.tmp/
+temp/
+tmp/
+benchmark_output/
+debug_output/
+*.log
+
+# Local OCR assets & model downloads
+tessdata/
+
+# OS metadata
+.DS_Store
+Thumbs.db

@@ -4,9 +4,15 @@ import sys
 import subprocess
 import json
 import pytest
+from tests.create_benchmark_dataset import build_benchmark_dataset
 
-BENCHMARK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data"))
+BENCHMARK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "_generated"))
 ENV = {"PYTHONPATH": ".", **os.environ}
+
+@pytest.fixture(autouse=True, scope="module")
+def ensure_test_dataset():
+    if not os.path.exists(BENCHMARK_DIR) or not os.listdir(BENCHMARK_DIR):
+        build_benchmark_dataset(BENCHMARK_DIR)
 
 def extract_json_from_stdout(stdout: str) -> dict:
     """Extracts JSON dictionary substring starting from first '{'."""

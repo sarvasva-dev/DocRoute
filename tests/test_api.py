@@ -3,9 +3,15 @@ import os
 import pytest
 from fastapi.testclient import TestClient
 from docroute.api.app import app
+from tests.create_benchmark_dataset import build_benchmark_dataset
 
 client = TestClient(app)
-BENCHMARK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "test_data"))
+BENCHMARK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "_generated"))
+
+@pytest.fixture(autouse=True, scope="module")
+def ensure_test_dataset():
+    if not os.path.exists(BENCHMARK_DIR) or not os.listdir(BENCHMARK_DIR):
+        build_benchmark_dataset(BENCHMARK_DIR)
 
 def test_health_endpoint():
     res = client.get("/")

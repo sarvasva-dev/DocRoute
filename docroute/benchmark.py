@@ -3,13 +3,17 @@ import os
 import time
 import json
 import logging
-from typing import Dict, Any, List, Tuple
+from typing import Dict, Any, List, Optional
 import numpy as np
 
 from docroute.core.engine import DocRouteEngine
 from docroute.models.api import ProcessingOptions
 
 logger = logging.getLogger(__name__)
+
+# Default benchmark dataset directory (gitignored)
+DEFAULT_BENCHMARK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "tests", "_generated"))
+OUTPUT_BENCHMARK_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".tmp"))
 
 def levenshtein_distance(s1: str, s2: str) -> int:
     """Computes Levenshtein edit distance between two strings."""
@@ -38,27 +42,23 @@ def calculate_cer(ground_truth: str, hypothesis: str) -> float:
     dist = levenshtein_distance(gt_clean, hyp_clean)
     return float(dist) / float(len(gt_clean))
 
-def calculate_wer(ground_truth: str, hypothesis: str) -> float:
-    """Calculates Word Error Rate (WER)."""
-    gt_words = ground_truth.strip().split()
-    hyp_words = hypothesis.strip().split()
-    if not gt_words:
-        return 0.0 if not hyp_words else 1.0
-    dist = levenshtein_distance(" ".join(gt_words), " ".join(hyp_words))
-    return float(dist) / float(len(" ".join(gt_words)))
-
 class DocRouteBenchmarkSuite:
-    """Executes benchmark evaluation across test dataset and calculates reproducible metrics."""
+    """Executes benchmark evaluation across local dataset and calculates reproducible metrics."""
 
-    def __init__(self, test_data_dir: str):
-        self.test_data_dir = test_data_dir
+    def __init__(self, test_data_dir: Optional[str] = None):
+        self.test_data_dir = test_data_dir or DEFAULT_BENCHMARK_DIR
+        self._ensure_dataset_exists()
         self.engine = DocRouteEngine()
 
-    def run_benchmark(self) -> Dict[str, Any]:
-        """Runs benchmark suite over test dataset files."""
-        if not os.path.exists(self.test_data_dir):
-            raise FileNotFoundError(f"Test data directory not found: {self.test_data_dir}")
+    def _ensure_dataset_exists(self) -> None:
+        """Automatically calls generator if local benchmark dataset is missing."""
+        if not os.path.exists(self.test_data_dir) or not os.listdir(self.test_data_dir):
+            logger.info("Local benchmark dataset missing. Invoking generator...")
+            from tests.create_benchmark_dataset import build_benchmark_dataset
+            build_benchmark_dataset(self.test_data_dir)
 
+    def run_benchmark(self) -> Dict[str, Any]:
+        """Runs benchmark suite over local test dataset files."""
         files = [
             f for f in os.listdir(self.test_data_dir)
             if f.endswith((".pdf", ".png", ".jpg", ".jpeg"))
@@ -118,6 +118,7 @@ class DocRouteBenchmarkSuite:
         avg_cer = float(np.mean(cer_scores)) if cer_scores else 0.0
 
         summary = {
+            "dataset_type": "Synthetic/Local Benchmark Suite",
             "total_documents_tested": len(files),
             "total_pages_tested": total_pages,
             "native_route_count": native_routes,
@@ -129,10 +130,15 @@ class DocRouteBenchmarkSuite:
             "detailed_results": results
         }
 
+        # Save output to local .tmp directory (gitignored)
+        os.makedirs(OUTPUT_BENCHMARK_DIR, exist_ok=True)
+        out_json = os.path.join(OUTPUT_BENCHMARK_DIR, "benchmark_results.json")
+        with open(out_json, "w") as f:
+            json.dump(summary, f, indent=2)
+
         return summary
 
 if __name__ == "__main__":
-    test_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "tests", "test_data"))
-    suite = DocRouteBenchmarkSuite(test_dir)
+    suite = DocRouteBenchmarkSuite()
     report = suite.run_benchmark()
     print(json.dumps(report, indent=2))

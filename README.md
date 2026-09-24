@@ -20,7 +20,7 @@ Rather than acting as a naive PyMuPDF wrapper or static OCR caller, **DocRoute**
 
 ---
 
-## Core Architecture
+## Architecture
 
 ```
                     PDF / IMAGE
@@ -67,54 +67,60 @@ Rather than acting as a naive PyMuPDF wrapper or static OCR caller, **DocRoute**
 
 ---
 
-## Installation & Setup
+## Installation & Configuration
 
 ### Prerequisites
 - Python 3.10+
-- Tesseract OCR engine (v5.0+) installed on host OS (e.g. `winget install UB-Mannheim.TesseractOCR` or `choco install tesseract`).
+- Tesseract OCR engine installed on host OS (e.g. `apt install tesseract-ocr`, `brew install tesseract`, `winget install UB-Mannheim.TesseractOCR`, or `choco install tesseract`).
 
-### Environment Setup
+### Installation
 ```bash
-# Clone or navigate to directory
-cd D:\Projects\DocRoute
-
-# Install dependencies in editable mode
+git clone https://github.com/sarvasva-dev/DocRoute.git
+cd DocRoute
 pip install -e .
 ```
 
-### Language Packs (English + Hindi)
-DocRoute includes localized tessdata management. To verify installed languages:
+### Portable Environment Configuration
+DocRoute resolves Tesseract via environment variables or system PATH:
+
+- **Windows**:
+  ```cmd
+  set TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe
+  set TESSDATA_PREFIX=C:\Program Files\Tesseract-OCR\tessdata
+  ```
+- **Linux / macOS**:
+  ```bash
+  export TESSERACT_CMD=/usr/bin/tesseract
+  export TESSDATA_PREFIX=/usr/share/tesseract-ocr/5/tessdata
+  ```
+
+---
+
+## CLI Usage
+
+### Inspect Document Signals
 ```bash
-python -c "from docroute.ocr.tesseract import TesseractOCREngine; print(TesseractOCREngine().get_supported_languages())"
+docroute inspect sample.pdf
+```
+
+### Profile Document Layout (JSON)
+```bash
+docroute profile sample.pdf
+```
+
+### Adaptively Extract Document
+```bash
+docroute extract sample.pdf --json
+```
+
+### Force OCR Extraction
+```bash
+docroute ocr sample_scan.pdf --lang eng+hin
 ```
 
 ---
 
-## CLI Usage Examples
-
-### 1. Inspect Document Signals
-```bash
-docroute inspect tests/test_data/mixed_document.pdf
-```
-
-### 2. Profile Document Layout (JSON)
-```bash
-docroute profile tests/test_data/native_text.pdf
-```
-
-### 3. Adaptively Extract Document
-```bash
-docroute extract tests/test_data/mixed_document.pdf --json
-```
-
-### 4. Force OCR Extraction
-```bash
-docroute ocr tests/test_data/scanned_page.pdf --lang eng+hin
-```
-
----
-
-## API Microservice Usage
+## API Microservice
 
 ### Launching the Server
 ```bash
@@ -122,34 +128,37 @@ python -m docroute.api.app
 # Server runs at http://localhost:8000 (OpenAPI Docs at http://localhost:8000/docs)
 ```
 
-### Available Endpoints
-- `POST /documents`: Upload PDF/image file and run adaptive extraction.
-- `GET /documents/{id}`: Get full structured document payload.
-- `GET /documents/{id}/profile`: Get layout profile.
-- `GET /documents/{id}/pages`: Get list of extracted pages.
-- `GET /documents/{id}/text`: Get plain text aggregation.
-- `GET /documents/{id}/tables`: Get all extracted tables.
-- `GET /documents/{id}/quality`: Get overall quality report.
-- `GET /documents/{id}/debug/{page_num}`: Render visual debug image with bounding boxes.
+### Example Request (cURL)
+```bash
+curl -X POST "http://localhost:8000/documents?ocr_threshold=0.5" \
+  -H "accept: application/json" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@sample.pdf"
+```
 
 ---
 
-## Benchmarks & Evaluation
+## Reproducible Benchmarking
 
-Run the reproducible benchmark suite:
+*Benchmark results depend on document layout, hardware capabilities, OCR settings, and test corpus. The included benchmark suite generates a local synthetic dataset for comparative engineering testing.*
+
+### Running the Local Benchmark
 ```bash
+# 1. Generate local synthetic benchmark PDFs (gitignored)
+python tests/create_benchmark_dataset.py
+
+# 2. Run benchmark evaluation
 python -m docroute.benchmark
 ```
 
-### Verified Benchmark Results
-| Metric | Result |
+### Measured Local Benchmark Metrics (Synthetic Suite)
+| Metric | Measured Value |
 | :--- | :--- |
-| **Documents Tested** | 6 representative PDF documents |
-| **Native Route Latency** | ~17.3 ms / page |
-| **OCR Route Latency** | ~284 ms / page (200 DPI rendering) |
-| **Scanned Page Accuracy** | 92.8% text accuracy (CER = 0.072) |
-| **Native Route Success** | 100% on clean vector PDFs |
-| **OCR Fallback Rate** | 57.1% (triggered only when quality < 0.50) |
+| **Dataset Evaluated** | 6 synthetic test documents (7 pages) |
+| **Native Route Latency** | ~17.4 ms / page |
+| **OCR Pipeline Latency** | ~471.4 ms / page (includes 200 DPI rendering, deskewing & Tesseract OCR) |
+| **Scanned Page Accuracy** | 92.8% text accuracy (CER = 0.0722 on scanned page) |
+| **OCR Fallback Rate** | 57.1% (triggered strictly when native quality score < 0.50) |
 
 ---
 
@@ -160,8 +169,9 @@ python -m pytest -v
 
 ---
 
-## Repository Documentation
-- [Architecture & Design](docs/architecture.md)
-- [Technical Research](docs/research.md)
+## Documentation
+- [Architecture & Technical Design](docs/architecture.md)
+- [Technology Evaluation & Research](docs/research.md)
 - [Benchmark Report](docs/benchmark.md)
 - [BulkBeat Integration Plan](docs/bulkbeat-integration.md)
+- [Repository Cleanup Report](docs/repository_cleanup.md)
