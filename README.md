@@ -1,5 +1,7 @@
 # DocRoute: Adaptive Document Intelligence Engine
 
+[![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support%20Project-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://rzp.io/rzp/0e1N1Vb)
+
 **DocRoute** is a production-grade, reusable document-processing framework designed to intelligently analyze, route, and extract structured text, tables, quality metrics, and page-level provenance from PDFs and image documents.
 
 Rather than acting as a naive PyMuPDF wrapper or static OCR caller, **DocRoute** functions as an **Adaptive Engine**: it inspects document layout signals, evaluates native text quality, automatically routes scanned pages to an OpenCV-enhanced Tesseract OCR pipeline, and provides fine-grained provenance explaining *where* every piece of text came from and *why* a specific extraction method was selected.
@@ -263,3 +265,14 @@ python -m pytest -v
 - [Benchmark Report](docs/benchmark.md)
 - [BulkBeat Integration Plan](docs/bulkbeat-integration.md)
 - [Repository Cleanup Report](docs/repository_cleanup.md)
+
+---
+
+## ☕ Support & Sponsorship
+
+If **DocRoute** has helped your project or saves you money on commercial document OCR APIs, please consider supporting the project's development and hosting costs!
+
+[![Support & Buy Me a Coffee](https://img.shields.io/badge/☕_Buy_Me_a_Coffee-Support_DocRoute-f59e0b?style=for-the-badge&logoColor=white)](https://rzp.io/rzp/0e1N1Vb)
+
+👉 **[Click Here to Support / Buy Me a Coffee](https://rzp.io/rzp/0e1N1Vb)** (`https://rzp.io/rzp/0e1N1Vb`)
+
