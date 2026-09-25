@@ -440,6 +440,15 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    function escapeHtml(str) {
+        if (!str) return "";
+        return String(str)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
     // --- Pages List Tab ---
     function renderPagesTab() {
         pagesListContainer.innerHTML = "";
@@ -449,9 +458,25 @@ document.addEventListener("DOMContentLoaded", () => {
             const card = document.createElement("div");
             card.className = "card glass-card feature-card";
             card.style.padding = "1rem";
+
+            const rawText = (p.text || '').trim();
+            const lines = rawText.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const previewText = lines.length > 1 ? lines.slice(0, 4).join(' ') : rawText;
+            const wordCount = rawText ? rawText.split(/\s+/).filter(w => w.length > 0).length : 0;
+            const isOcr = p.extraction_method === 'ocr';
+            const routeBadge = isOcr ? '🟢 Vision OCR' : '🔵 Native Vector';
+
             card.innerHTML = `
-                <h4>Page ${p.page_number} (${p.extraction_method || 'native'})</h4>
-                <p style="font-size: 0.82rem; color: var(--text-muted);">${(p.text || '').slice(0, 150)}...</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+                    <strong style="color:#f8fafc; font-size:0.95rem;">Page ${p.page_number}</strong>
+                    <span class="badge" style="font-size:0.75rem; background:${isOcr ? 'rgba(16,185,129,0.15)' : 'rgba(59,130,246,0.15)'}; color:${isOcr ? '#34d399' : '#60a5fa'}; padding: 0.2rem 0.6rem;">${routeBadge}</span>
+                </div>
+                <p style="font-size: 0.82rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 0.5rem; word-break: break-word;">${escapeHtml(previewText.slice(0, 200))}...</p>
+                <div style="font-size:0.75rem; color: var(--text-subtle); display:flex; gap:0.85rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 0.4rem; margin-top: 0.4rem;">
+                    <span>📝 ${wordCount} words</span>
+                    <span>📏 ${p.width || 612}×${p.height || 792} px</span>
+                    <span>⚡ Quality: ${Math.round((p.quality?.overall_score || 0.9) * 100)}%</span>
+                </div>
             `;
             pagesListContainer.appendChild(card);
         });
