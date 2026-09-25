@@ -129,7 +129,7 @@ async def process_ocr_unified(
 
         doc_engine = DocRouteEngine(options=opts)
         structured_doc = doc_engine.process_document(saved_path, options_override=opts)
-        doc_profile = doc_engine.profiler.profile_document(saved_path)
+        doc_profile = doc_engine.profiler.profile_document(saved_path, max_pages=max_pages)
 
         doc_id = structured_doc.document_id
         DOCUMENT_STORE[doc_id] = structured_doc
@@ -232,7 +232,7 @@ async def upload_and_process_document_v1(
 
         doc_engine = DocRouteEngine(options=opts)
         structured_doc = doc_engine.process_document(saved_path, options_override=opts)
-        doc_profile = doc_engine.profiler.profile_document(saved_path)
+        doc_profile = doc_engine.profiler.profile_document(saved_path, max_pages=max_pages)
 
         doc_id = structured_doc.document_id
         DOCUMENT_STORE[doc_id] = structured_doc

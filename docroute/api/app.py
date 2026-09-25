@@ -154,6 +154,10 @@ async def serve_js():
         return FileResponse(js_path, media_type="application/javascript")
     return Response(status_code=404)
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return Response(status_code=204)
+
 if __name__ == "__main__":
     import uvicorn
     port = int(os.getenv("PORT", "8000"))
