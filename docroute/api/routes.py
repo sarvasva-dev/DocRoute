@@ -71,7 +71,8 @@ async def process_ocr_unified(
     engine_name: str = Form("auto"),
     extract_tables: bool = Form(True),
     include_provenance: bool = Form(True),
-    quality_threshold: float = Form(0.5)
+    quality_threshold: float = Form(0.5),
+    max_pages: int = Form(50)
 ):
     """Primary unified OCR & document extraction endpoint."""
     clean_filename = _validate_path_security(file.filename)
@@ -122,7 +123,8 @@ async def process_ocr_unified(
             ocr_threshold=quality_threshold,
             force_ocr=(engine_name.lower() == "tesseract"),
             language=language,
-            extract_tables=extract_tables
+            extract_tables=extract_tables,
+            max_pages=max_pages
         )
 
         doc_engine = DocRouteEngine(options=opts)
@@ -183,7 +185,8 @@ async def upload_and_process_document_v1(
     ocr_threshold: float = Query(0.5, ge=0.0, le=1.0),
     force_ocr: bool = Query(False),
     language: str = Query("eng"),
-    extract_tables: bool = Query(True)
+    extract_tables: bool = Query(True),
+    max_pages: int = Query(50, ge=1, le=500)
 ):
     """Uploads a PDF or image file and returns full structured document model."""
     clean_filename = _validate_path_security(file.filename)
@@ -223,7 +226,8 @@ async def upload_and_process_document_v1(
             ocr_threshold=ocr_threshold,
             force_ocr=force_ocr,
             language=language,
-            extract_tables=extract_tables
+            extract_tables=extract_tables,
+            max_pages=max_pages
         )
 
         doc_engine = DocRouteEngine(options=opts)

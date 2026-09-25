@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const thresholdSlider = document.getElementById("ocr-threshold-slider");
     const thresholdVal = document.getElementById("ocr-threshold-val");
     const ocrLanguageSelect = document.getElementById("ocr-language-select");
+    const maxPagesSelect = document.getElementById("max-pages-select");
     const forceOcrToggle = document.getElementById("force-ocr-toggle");
     const extractTablesToggle = document.getElementById("extract-tables-toggle");
 
@@ -280,8 +281,14 @@ document.addEventListener("DOMContentLoaded", () => {
         formData.append("extract_tables", extractTablesToggle.checked);
         formData.append("include_provenance", "true");
         formData.append("quality_threshold", thresholdSlider.value);
+        if (maxPagesSelect) {
+            formData.append("max_pages", maxPagesSelect.value);
+        }
 
         updateProgressStage("Uploading document payload...", 20);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 90000); // 90 second timeout
 
         try {
             setTimeout(() => updateProgressStage("Profiling layout signals...", 45), 400);
@@ -290,8 +297,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const res = await fetch("/v1/ocr", {
                 method: "POST",
-                body: formData
+                body: formData,
+                signal: controller.signal
             });
+            clearTimeout(timeoutId);
 
             if (res.status === 502 || res.status === 503 || res.status === 504) {
                 throw new Error("COLD_START");
@@ -314,8 +323,11 @@ document.addEventListener("DOMContentLoaded", () => {
             workspaceResults.scrollIntoView({ behavior: "smooth" });
 
         } catch (err) {
+            clearTimeout(timeoutId);
             progressStageBar.classList.add("hidden");
-            if (err.message === "COLD_START") {
+            if (err.name === "AbortError") {
+                showToast("Request timed out (90s). Try selecting a lower Max Pages limit (e.g. 10 or 25 pages).", 6000);
+            } else if (err.message === "COLD_START") {
                 coldStartBanner.classList.remove("hidden");
                 showToast("Server is waking up. Please click 'Retry Now'.", 5000);
             } else {

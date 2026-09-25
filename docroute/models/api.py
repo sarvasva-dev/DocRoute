@@ -13,6 +13,7 @@ class ProcessingOptions(BaseModel):
     language: str = Field("eng", description="Primary OCR language (e.g. eng, hin, eng+hin)")
     extract_tables: bool = Field(True, description="Enable table extraction")
     visual_debug: bool = Field(False, description="Enable visual debug image generation")
+    max_pages: Optional[int] = Field(50, description="Maximum number of pages to process (default 50)")
 
 class DocumentUploadResponse(BaseModel):
     """Response returned upon document upload & processing initiation."""

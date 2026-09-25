@@ -66,7 +66,8 @@ class DocRouteEngine:
         fallback_counts = 0
 
         # Step 2: Page-by-Page Processing
-        for p_prof in doc_profile.pages:
+        pages_to_process = doc_profile.pages[:opts.max_pages] if opts.max_pages else doc_profile.pages
+        for p_prof in pages_to_process:
             p_num = p_prof.page_number
             page_area = max(1.0, p_prof.width * p_prof.height)
 
