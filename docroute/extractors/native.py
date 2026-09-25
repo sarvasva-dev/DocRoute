@@ -1,7 +1,7 @@
 """PyMuPDF Native Text and Layout Extractor."""
 import logging
 import uuid
-from typing import List, Dict, Any, Tuple
+from typing import List, Dict, Any, Tuple, Optional
 import fitz  # PyMuPDF
 
 from docroute.extractors.base import BaseExtractor
@@ -16,7 +16,7 @@ class NativePDFExtractor(BaseExtractor):
     """Extracts native text, font blocks, and element coordinates using PyMuPDF."""
 
     def extract_page(
-        self, file_path: str, page_number: int, profile: PageProfile
+        self, file_path: str, page_number: int, profile: PageProfile, fitz_doc: Optional[fitz.Document] = None
     ) -> PageExtraction:
         """Extracts native text layer and block-level provenance from PDF page."""
         doc_id = file_path
@@ -25,11 +25,12 @@ class NativePDFExtractor(BaseExtractor):
         provenance_records: List[ProvenanceRecord] = []
 
         try:
-            with fitz.open(file_path) as doc:
-                if page_idx < 0 or page_idx >= len(doc):
-                    raise ValueError(f"Page number {page_number} out of bounds (1-{len(doc)})")
+            doc_context = fitz_doc if fitz_doc is not None else fitz.open(file_path)
+            try:
+                if page_idx < 0 or page_idx >= len(doc_context):
+                    raise ValueError(f"Page number {page_number} out of bounds (1-{len(doc_context)})")
                 
-                page = doc[page_idx]
+                page = doc_context[page_idx]
                 blocks = page.get_text("blocks")  # returns list of (x0, y0, x1, y1, text, block_no, block_type)
 
                 for b in blocks:
@@ -52,6 +53,9 @@ class NativePDFExtractor(BaseExtractor):
                             routing_reasoning="High native text density detected by Document Profiler."
                         )
                         provenance_records.append(rec)
+            finally:
+                if fitz_doc is None and doc_context:
+                    doc_context.close()
 
             full_text = "\n\n".join(extracted_text_blocks)
             

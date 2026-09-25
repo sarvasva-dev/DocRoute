@@ -59,7 +59,7 @@ class DocRouteEngine:
         logger.info(f"Initiating DocRoute processing for: {doc_id}")
 
         # Step 1: Profile Document
-        doc_profile = self.profiler.profile_document(file_path)
+        doc_profile = self.profiler.profile_document(file_path, max_pages=opts.max_pages)
         provenance_tracker = ProvenanceTracker(document_id=doc_id)
         page_extractions: List[PageExtraction] = []
         overall_page_scores: List[float] = []
@@ -67,50 +67,55 @@ class DocRouteEngine:
 
         # Step 2: Page-by-Page Processing
         pages_to_process = doc_profile.pages[:opts.max_pages] if opts.max_pages else doc_profile.pages
-        for p_prof in pages_to_process:
-            p_num = p_prof.page_number
-            page_area = max(1.0, p_prof.width * p_prof.height)
+        doc_fitz = fitz.open(file_path) if file_path.lower().endswith(".pdf") else None
+        try:
+            for p_prof in pages_to_process:
+                p_num = p_prof.page_number
+                page_area = max(1.0, p_prof.width * p_prof.height)
 
-            # Force OCR check
-            if opts.force_ocr:
-                logger.info(f"Page {p_num}: Force OCR enabled.")
-                page_ext = self.ocr_extractor.extract_page(file_path, p_num, p_prof)
-                page_ext.quality.fallback_triggered = True
-                page_ext.quality.reasoning = "Force OCR enabled by caller."
-                fallback_counts += 1
-            else:
-                # Native Extraction
-                native_ext = self.native_extractor.extract_page(file_path, p_num, p_prof)
-                native_quality = QualityAssessor.assess_native_quality(
-                    native_ext.text, p_prof.native_char_count, page_area, threshold=opts.ocr_threshold
-                )
-
-                # Router decision
-                should_ocr, route_reasoning = self.router.decide_route(
-                    p_prof, native_quality, threshold=opts.ocr_threshold
-                )
-
-                if should_ocr:
-                    logger.info(f"Page {p_num}: Invoking OCR fallback. ({route_reasoning})")
+                # Force OCR check
+                if opts.force_ocr:
+                    logger.info(f"Page {p_num}: Force OCR enabled.")
                     page_ext = self.ocr_extractor.extract_page(file_path, p_num, p_prof)
                     page_ext.quality.fallback_triggered = True
-                    page_ext.quality.reasoning = route_reasoning
+                    page_ext.quality.reasoning = "Force OCR enabled by caller."
                     fallback_counts += 1
                 else:
-                    logger.info(f"Page {p_num}: Accepting Native extraction. ({route_reasoning})")
-                    page_ext = native_ext
-                    page_ext.quality = native_quality
-                    page_ext.quality.reasoning = route_reasoning
+                    # Native Extraction
+                    native_ext = self.native_extractor.extract_page(file_path, p_num, p_prof, fitz_doc=doc_fitz)
+                    native_quality = QualityAssessor.assess_native_quality(
+                        native_ext.text, p_prof.native_char_count, page_area, threshold=opts.ocr_threshold
+                    )
 
-            # Extract Tables if enabled
-            if opts.extract_tables:
-                extracted_tables = self.table_extractor.extract_tables_from_page(file_path, p_num)
-                page_ext.tables = extracted_tables
+                    # Router decision
+                    should_ocr, route_reasoning = self.router.decide_route(
+                        p_prof, native_quality, threshold=opts.ocr_threshold
+                    )
 
-            # Track Provenance
-            provenance_tracker.add_records(page_ext.provenance)
-            page_extractions.append(page_ext)
-            overall_page_scores.append(page_ext.quality.overall_score)
+                    if should_ocr:
+                        logger.info(f"Page {p_num}: Invoking OCR fallback. ({route_reasoning})")
+                        page_ext = self.ocr_extractor.extract_page(file_path, p_num, p_prof)
+                        page_ext.quality.fallback_triggered = True
+                        page_ext.quality.reasoning = route_reasoning
+                        fallback_counts += 1
+                    else:
+                        logger.info(f"Page {p_num}: Accepting Native extraction. ({route_reasoning})")
+                        page_ext = native_ext
+                        page_ext.quality = native_quality
+                        page_ext.quality.reasoning = route_reasoning
+
+                # Extract Tables if enabled
+                if opts.extract_tables:
+                    extracted_tables = self.table_extractor.extract_tables_from_page(file_path, p_num, fitz_doc=doc_fitz)
+                    page_ext.tables = extracted_tables
+
+                # Track Provenance
+                provenance_tracker.add_records(page_ext.provenance)
+                page_extractions.append(page_ext)
+                overall_page_scores.append(page_ext.quality.overall_score)
+        finally:
+            if doc_fitz:
+                doc_fitz.close()
 
         # Step 3: Compute Document Overall Quality Summary
         avg_score = float(np.mean(overall_page_scores)) if overall_page_scores else 0.0

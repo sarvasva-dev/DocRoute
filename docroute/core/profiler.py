@@ -13,11 +13,12 @@ class DocumentProfiler:
     """Inspects PDFs and images to generate detailed document profiles and routing signals."""
 
     @classmethod
-    def profile_document(cls, file_path: str) -> DocumentProfile:
+    def profile_document(cls, file_path: str, max_pages: Optional[int] = None) -> DocumentProfile:
         """Profiles document geometry, text density, image coverage, and scan likelihood.
         
         Args:
             file_path: Path to PDF or image file
+            max_pages: Optional maximum pages to profile
             
         Returns:
             DocumentProfile containing page profiles and document-level metrics
@@ -42,6 +43,8 @@ class DocumentProfiler:
 
         try:
             with fitz.open(file_path) as doc:
+                total_doc_pages = len(doc)
+                pages_to_profile = min(total_doc_pages, max_pages) if max_pages else total_doc_pages
                 pdf_meta = {
                     "format": doc.name,
                     "title": doc.metadata.get("title", ""),
@@ -51,10 +54,10 @@ class DocumentProfiler:
                     "creator": doc.metadata.get("creator", ""),
                     "creation_date": doc.metadata.get("creationDate", ""),
                     "encrypted": doc.is_encrypted,
-                    "page_count": len(doc)
+                    "page_count": total_doc_pages
                 }
 
-                for page_idx in range(len(doc)):
+                for page_idx in range(pages_to_profile):
                     page = doc[page_idx]
                     rect = page.rect
                     w, h = rect.width, rect.height
