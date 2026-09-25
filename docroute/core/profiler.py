@@ -99,19 +99,12 @@ class DocumentProfiler:
                     else:
                         native_page_count += 1
 
-                    # Table Likelihood calculation
-                    # Check for horizontal/vertical lines before invoking heavy table finder
+                    # Table Likelihood calculation based on drawing paths or line elements
                     drawings = page.get_drawings()
-                    has_table_lines = any(len(d.get("items", [])) >= 2 for d in drawings[:30]) if drawings else False
-                    table_count = 0
+                    has_table_lines = len(drawings) > 5 if drawings else False
+                    table_count = 1 if has_table_lines else 0
+                    table_likelihood = 0.80 if has_table_lines else 0.05
                     if has_table_lines:
-                        tabs = page.find_tables()
-                        tables_list = tabs.tables if hasattr(tabs, "tables") else []
-                        table_count = len(tables_list)
-                    
-                    table_likelihood = min(1.0, table_count * 0.5) if table_count > 0 else 0.05
-
-                    if table_count > 0:
                         table_heavy_page_count += 1
 
                     if image_count > 2 or image_area_ratio > 0.5:

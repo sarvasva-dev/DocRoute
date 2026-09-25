@@ -104,8 +104,8 @@ class DocRouteEngine:
                         page_ext.quality = native_quality
                         page_ext.quality.reasoning = route_reasoning
 
-                # Extract Tables if enabled and page has table layout signals
-                if opts.extract_tables and p_prof.table_likelihood > 0.05:
+                # Extract Tables if enabled
+                if opts.extract_tables:
                     extracted_tables = self.table_extractor.extract_tables_from_page(file_path, p_num, fitz_doc=doc_fitz)
                     page_ext.tables = extracted_tables
 
