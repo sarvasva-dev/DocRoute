@@ -1,5 +1,6 @@
 # DocRoute: Adaptive Document Intelligence Engine
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-docroute.sarthakml.in-00f2fe?style=for-the-badge&logo=fastapi&logoColor=white)](https://docroute.sarthakml.in/)
 [![Buy Me A Coffee](https://img.shields.io/badge/Buy%20Me%20A%20Coffee-Support%20Project-ffdd00?style=for-the-badge&logo=buy-me-a-coffee&logoColor=black)](https://rzp.io/rzp/0e1N1Vb)
 
 **DocRoute** is a production-grade, reusable document-processing framework designed to intelligently analyze, route, and extract structured text, tables, quality metrics, and page-level provenance from PDFs and image documents.
