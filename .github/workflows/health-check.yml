@@ -13,7 +13,7 @@ jobs:
         run: |
           TARGET_URL="${{ secrets.DOCROUTE_HEALTH_URL }}"
           if [ -z "$TARGET_URL" ]; then
-            TARGET_URL="https://docroute-engine.onrender.com/health"
+            TARGET_URL="https://docroute.sarthakml.in/health"
           fi
           echo "Pinging DocRoute Health Endpoint: $TARGET_URL"
           curl -f -s "$TARGET_URL" || echo "API is waking up from idle state."
