@@ -1233,3 +1233,51 @@ input:checked + .slider:before { transform: translateX(20px); }
     .workspace-grid { grid-template-columns: 1fr; }
     .api-grid-card { grid-template-columns: 1fr; }
 }
+
+/* Performance & Timeout Guide Box */
+.cloud-tip-box {
+    margin-top: 1.25rem;
+    padding: 1.1rem 1.35rem;
+    background: rgba(30, 41, 59, 0.55);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(99, 102, 241, 0.28);
+    border-radius: var(--radius-md);
+    font-size: 0.86rem;
+    color: var(--text-secondary);
+    transition: all 0.25s ease;
+}
+
+.cloud-tip-box:hover {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.12);
+}
+
+.cloud-tip-box .tip-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: #f1f5f9;
+    margin-bottom: 0.6rem;
+}
+
+.cloud-tip-box .tip-header .tip-icon {
+    font-size: 1.05rem;
+}
+
+.cloud-tip-box .tip-list {
+    margin: 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.cloud-tip-box .tip-list li {
+    line-height: 1.5;
+}
+
+.cloud-tip-box .tip-list strong {
+    color: #f8fafc;
+}
+

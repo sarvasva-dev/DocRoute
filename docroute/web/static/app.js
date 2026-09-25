@@ -239,6 +239,10 @@ document.addEventListener("DOMContentLoaded", () => {
         fileBanner.classList.remove("hidden");
         btnProcess.disabled = false;
         coldStartBanner.classList.add("hidden");
+
+        if (file.size > 3 * 1024 * 1024) {
+            showToast(`💡 Large file selected (${formatBytes(file.size)}). Tip: Select 10 or 25 pages for fast sub-15s response times on cloud servers!`, 6000);
+        }
     }
 
     function clearSelectedFile() {
