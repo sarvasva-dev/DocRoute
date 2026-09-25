@@ -108,6 +108,8 @@ class OCRExtractor(BaseExtractor):
 
             return PageExtraction(
                 page_number=page_number,
+                width=profile.width,
+                height=profile.height,
                 text=ocr_text,
                 extraction_method="ocr",
                 quality=quality,

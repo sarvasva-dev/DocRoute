@@ -70,6 +70,8 @@ class NativePDFExtractor(BaseExtractor):
 
             return PageExtraction(
                 page_number=page_number,
+                width=profile.width,
+                height=profile.height,
                 text=full_text,
                 extraction_method="native",
                 quality=quality,
