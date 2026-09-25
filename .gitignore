@@ -32,6 +32,11 @@ debug_output/
 # Local OCR assets & model downloads
 tessdata/
 
+# Build & packaging artifacts
+*.egg-info/
+build/
+dist/
+
 # OS metadata
 .DS_Store
 Thumbs.db

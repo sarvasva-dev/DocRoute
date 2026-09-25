@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocRoute — Adaptive Document Intelligence Engine</title>
+    <meta name="description" content="Production-grade reusable document processing framework combining PyMuPDF, OpenCV preprocessing, Tesseract OCR, adaptive quality routing, and provenance tracking.">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <div class="brand-logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <path d="M12 18v-6"></path>
+                    <path d="m9 15 3 3 3-3"></path>
+                </svg>
+            </div>
+            <div class="brand-title">
+                <span class="title-main">DocRoute</span>
+                <span class="title-sub">Intelligence Hub</span>
+            </div>
+            <span class="badge badge-version">v1.0.0</span>
+        </div>
+
+        <nav class="nav-links">
+            <a href="#upload-section" class="nav-link active" id="nav-upload">Dashboard</a>
+            <a href="#workspace-section" class="nav-link" id="nav-workspace">Inspector</a>
+            <a href="#api-docs-section" class="nav-link" id="nav-api">API Specs & Code</a>
+            <a href="/docs" target="_blank" class="nav-link ext-link">OpenAPI Docs ↗</a>
+        </nav>
+
+        <div class="nav-actions">
+            <div class="status-indicator">
+                <span class="status-dot online"></span>
+                <span class="status-text">Engine Online</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Hero & Document Upload Section -->
+        <section id="upload-section" class="hero-section">
+            <div class="hero-header">
+                <h1 class="hero-title">Adaptive Document Intelligence & Quality Routing</h1>
+                <p class="hero-subtitle">
+                    Process PDFs & Images with native vector parsing, automatic OpenCV pre-cleaning, Tesseract multi-language OCR, table matrix extraction, and full spatial provenance.
+                </p>
+            </div>
+
+            <!-- Upload Card -->
+            <div class="card glass-card upload-card">
+                <div class="upload-dropzone" id="dropzone">
+                    <input type="file" id="file-input" accept=".pdf,.png,.jpg,.jpeg,.tiff,.webp" class="file-input-hidden">
+                    <div class="dropzone-content">
+                        <div class="upload-icon-wrapper">
+                            <svg class="upload-icon" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <h3>Drag & Drop document here or <span class="browse-link">Browse Files</span></h3>
+                        <p class="upload-hint">Supports PDF, PNG, JPG, JPEG, TIFF, WEBP (Max 50 MB)</p>
+                        <div class="selected-file-banner hidden" id="file-banner">
+                            <span class="file-name" id="selected-file-name">document.pdf</span>
+                            <span class="file-size" id="selected-file-size">1.2 MB</span>
+                            <button type="button" class="btn-icon-clear" id="btn-clear-file" title="Remove file">✕</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Processing Options Drawer -->
+                <div class="options-grid">
+                    <div class="option-group">
+                        <label for="ocr-threshold-slider">
+                            <span>Scan Likelihood Threshold</span>
+                            <span class="value-badge" id="ocr-threshold-val">0.50</span>
+                        </label>
+                        <input type="range" id="ocr-threshold-slider" min="0" max="1" step="0.05" value="0.50">
+                        <span class="field-hint">Routes to OCR if scan score &gt; threshold</span>
+                    </div>
+
+                    <div class="option-group">
+                        <label for="ocr-language-select">OCR Language Engine</label>
+                        <select id="ocr-language-select" class="custom-select">
+                            <option value="eng">English (eng)</option>
+                            <option value="hin">Hindi (hin)</option>
+                            <option value="eng+hin" selected>Multilingual (eng + hin)</option>
+                        </select>
+                    </div>
+
+                    <div class="option-group toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="force-ocr-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="toggle-label">
+                            <span class="label-title">Force Full OCR</span>
+                            <span class="field-hint">Bypass native text, force vision OCR</span>
+                        </div>
+                    </div>
+
+                    <div class="option-group toggle-group">
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="extract-tables-toggle" checked>
+                            <span class="slider round"></span>
+                        </label>
+                        <div class="toggle-label">
+                            <span class="label-title">Extract Table Matrices</span>
+                            <span class="field-hint">Detect vector grids & cell structures</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="upload-action-row">
+                    <button id="btn-process" class="btn btn-primary btn-glow" disabled>
+                        <svg class="btn-spinner hidden" id="process-spinner" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+                        </svg>
+                        <span id="btn-process-text">Process Document</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Document Intelligence Workspace -->
+        <section id="workspace-section" class="workspace-section hidden">
+            <!-- Summary Sidebar & Gauges -->
+            <div class="workspace-grid">
+                <aside class="sidebar-panel">
+                    <div class="card glass-card meta-card">
+                        <h3 class="panel-header">Document Profile</h3>
+                        <div class="meta-item">
+                            <span class="meta-key">Document ID</span>
+                            <span class="meta-val code-font" id="meta-doc-id">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-key">Filename</span>
+                            <span class="meta-val" id="meta-filename">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-key">Total Pages</span>
+                            <span class="meta-val" id="meta-total-pages">-</span>
+                        </div>
+                        <div class="meta-item">
+                            <span class="meta-key">Overall Quality</span>
+                            <span class="meta-val badge" id="meta-quality-badge">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Gauges Card -->
+                    <div class="card glass-card gauge-card">
+                        <h3 class="panel-header">Routing Signals</h3>
+                        
+                        <!-- Scan Likelihood Meter -->
+                        <div class="gauge-container">
+                            <div class="gauge-label">
+                                <span>Scan Likelihood Score</span>
+                                <strong id="gauge-scan-percent">0%</strong>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill scan-fill" id="gauge-scan-fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="gauge-footer" id="gauge-scan-recommendation">Route: Vector Native</span>
+                        </div>
+
+                        <!-- Quality Meter -->
+                        <div class="gauge-container">
+                            <div class="gauge-label">
+                                <span>Extraction Quality Index</span>
+                                <strong id="gauge-quality-percent">0.00</strong>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill quality-fill" id="gauge-quality-fill" style="width: 0%;"></div>
+                            </div>
+                            <span class="gauge-footer" id="gauge-quality-status">Confidence: High</span>
+                        </div>
+                    </div>
+
+                    <!-- Page Selector Navigator -->
+                    <div class="card glass-card page-nav-card">
+                        <h3 class="panel-header">Page Navigator</h3>
+                        <div class="page-select-row">
+                            <button class="btn btn-secondary btn-sm" id="btn-prev-page">← Prev</button>
+                            <span class="page-indicator" id="page-indicator">Page 1 of 1</span>
+                            <button class="btn btn-secondary btn-sm" id="btn-next-page">Next →</button>
+                        </div>
+                        <div class="page-route-badge-row">
+                            <span class="meta-key">Page Route:</span>
+                            <span class="badge badge-route" id="page-route-badge">native</span>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Main Content Inspector Panel -->
+                <div class="main-inspector">
+                    <div class="card glass-card tab-container-card">
+                        <!-- Inspector Tab Header -->
+                        <div class="tab-header">
+                            <button class="tab-btn active" data-tab="tab-overlay">
+                                📐 Spatial Overlay Canvas
+                            </button>
+                            <button class="tab-btn" data-tab="tab-debug-img">
+                                🖼️ Visual Debug Image
+                            </button>
+                            <button class="tab-btn" data-tab="tab-text">
+                                📝 Extracted Text
+                            </button>
+                            <button class="tab-btn" data-tab="tab-tables">
+                                📊 Table Matrix (<span id="table-count-badge">0</span>)
+                            </button>
+                            <button class="tab-btn" data-tab="tab-provenance">
+                                🔍 Quality & Provenance
+                            </button>
+                        </div>
+
+                        <!-- Tab Content Body -->
+                        <div class="tab-content-body">
+                            <!-- Tab 1: Overlay Canvas -->
+                            <div class="tab-pane active" id="tab-overlay">
+                                <div class="canvas-controls-bar">
+                                    <div class="legend-group">
+                                        <span class="legend-item"><span class="color-box box-native"></span> Native Block</span>
+                                        <span class="legend-item"><span class="color-box box-ocr"></span> OCR Block</span>
+                                        <span class="legend-item"><span class="color-box box-table"></span> Table Grid</span>
+                                    </div>
+                                    <div class="toggle-overlay-options">
+                                        <label><input type="checkbox" id="chk-show-words" checked> Show Words</label>
+                                        <label><input type="checkbox" id="chk-show-tables" checked> Show Tables</label>
+                                    </div>
+                                </div>
+
+                                <div class="canvas-viewport" id="canvas-viewport">
+                                    <canvas id="page-canvas"></canvas>
+                                    <div id="bbox-tooltip" class="bbox-tooltip hidden"></div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 2: Visual Debug Image -->
+                            <div class="tab-pane" id="tab-debug-img">
+                                <div class="debug-img-container">
+                                    <div class="debug-actions">
+                                        <span>Live FastAPI visual debug overlay from <code>/documents/{id}/debug/{page_num}</code></span>
+                                        <a href="#" id="btn-download-debug" class="btn btn-secondary btn-sm" download>Download Debug PNG</a>
+                                    </div>
+                                    <div class="debug-img-wrapper">
+                                        <img id="debug-overlay-img" src="" alt="Visual Debug Page Overlay" class="debug-img">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tab 3: Extracted Text -->
+                            <div class="tab-pane" id="tab-text">
+                                <div class="text-actions-bar">
+                                    <div class="text-stats">
+                                        <span id="stat-chars">0 Chars</span> • 
+                                        <span id="stat-words">0 Words</span> • 
+                                        <span id="stat-lines">0 Lines</span>
+                                    </div>
+                                    <button class="btn btn-secondary btn-sm" id="btn-copy-text">📋 Copy Full Text</button>
+                                </div>
+                                <textarea id="extracted-text-view" readonly class="text-editor" placeholder="Extracted text will appear here..."></textarea>
+                            </div>
+
+                            <!-- Tab 4: Table Matrix -->
+                            <div class="tab-pane" id="tab-tables">
+                                <div class="table-inspector-header">
+                                    <div class="table-selector-row">
+                                        <label for="table-select-dropdown">Select Extracted Table:</label>
+                                        <select id="table-select-dropdown" class="custom-select"></select>
+                                    </div>
+                                    <div class="table-export-actions">
+                                        <button class="btn btn-secondary btn-sm" id="btn-copy-table-json">Copy JSON</button>
+                                        <button class="btn btn-secondary btn-sm" id="btn-copy-table-csv">Copy CSV</button>
+                                    </div>
+                                </div>
+                                <div class="table-matrix-wrapper" id="table-matrix-container">
+                                    <p class="placeholder-text">No tables extracted or selected.</p>
+                                </div>
+                            </div>
+
+                            <!-- Tab 5: Quality & Provenance -->
+                            <div class="tab-pane" id="tab-provenance">
+                                <div class="provenance-grid">
+                                    <!-- Overall Metrics -->
+                                    <div class="provenance-metrics-card">
+                                        <h4>Extraction Quality Report</h4>
+                                        <div class="metrics-grid">
+                                            <div class="metric-box">
+                                                <span class="m-val" id="q-overall">0.00</span>
+                                                <span class="m-lbl">Overall Score</span>
+                                            </div>
+                                            <div class="metric-box">
+                                                <span class="m-val" id="q-ocr-conf">0.0%</span>
+                                                <span class="m-lbl">OCR Confidence</span>
+                                            </div>
+                                            <div class="metric-box">
+                                                <span class="m-val" id="q-density">0.00</span>
+                                                <span class="m-lbl">Formatting Density</span>
+                                            </div>
+                                            <div class="metric-box">
+                                                <span class="m-val" id="q-garbage">0.0%</span>
+                                                <span class="m-lbl">Garbage Ratio</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Provenance Stream Table -->
+                                    <div class="provenance-log-wrapper">
+                                        <h4>Spatial Block Provenance Stream</h4>
+                                        <div class="table-scroll-container">
+                                            <table class="data-table" id="provenance-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Line #</th>
+                                                        <th>BBox Coordinates [x0, y0, x1, y1]</th>
+                                                        <th>Source Engine</th>
+                                                        <th>Confidence</th>
+                                                        <th>Sample Text</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr><td colspan="5" class="placeholder-text">No provenance data loaded.</td></tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- REST API Reference & Code Snippets Section -->
+        <section id="api-docs-section" class="api-docs-section">
+            <div class="section-title-row">
+                <h2>DocRoute REST API Reference & Code Snippets</h2>
+                <p class="section-sub">Integrate DocRoute document intelligence directly into your Python, JavaScript, or backend services.</p>
+            </div>
+
+            <div class="card glass-card api-grid-card">
+                <!-- Endpoint Selector Tabs -->
+                <div class="api-endpoint-list">
+                    <button class="api-ep-item active" data-ep="upload">
+                        <span class="http-badge post">POST</span>
+                        <code>/documents</code>
+                        <span class="ep-desc">Upload & Process Document</span>
+                    </button>
+                    <button class="api-ep-item" data-ep="get-doc">
+                        <span class="http-badge get">GET</span>
+                        <code>/documents/{id}</code>
+                        <span class="ep-desc">Get Full Structured Payload</span>
+                    </button>
+                    <button class="api-ep-item" data-ep="get-profile">
+                        <span class="http-badge get">GET</span>
+                        <code>/documents/{id}/profile</code>
+                        <span class="ep-desc">Get Document Profile & Scan Score</span>
+                    </button>
+                    <button class="api-ep-item" data-ep="get-text">
+                        <span class="http-badge get">GET</span>
+                        <code>/documents/{id}/text</code>
+                        <span class="ep-desc">Get Aggregated Plain Text</span>
+                    </button>
+                    <button class="api-ep-item" data-ep="get-tables">
+                        <span class="http-badge get">GET</span>
+                        <code>/documents/{id}/tables</code>
+                        <span class="ep-desc">Get Extracted Table Matrices</span>
+                    </button>
+                    <button class="api-ep-item" data-ep="get-debug">
+                        <span class="http-badge get">GET</span>
+                        <code>/documents/{id}/debug/{page_num}</code>
+                        <span class="ep-desc">Get Visual Debug Overlay PNG</span>
+                    </button>
+                </div>
+
+                <!-- Code Generator Viewer -->
+                <div class="api-code-viewer">
+                    <div class="code-viewer-header">
+                        <div class="lang-tabs">
+                            <button class="lang-tab active" data-lang="curl">cURL</button>
+                            <button class="lang-tab" data-lang="python">Python</button>
+                            <button class="lang-tab" data-lang="js">JavaScript (Fetch)</button>
+                            <button class="lang-tab" data-lang="node">Node.js (Axios)</button>
+                        </div>
+                        <button class="btn btn-secondary btn-sm" id="btn-copy-code">📋 Copy Code Snippet</button>
+                    </div>
+
+                    <div class="code-box-wrapper">
+                        <pre><code id="api-code-content" class="code-font"># Code snippet loading...</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>DocRoute Adaptive Document Intelligence Engine • Built with PyMuPDF, OpenCV, Tesseract OCR, & FastAPI</p>
+            <div class="footer-links">
+                <a href="https://github.com/sarvasva-dev/DocRoute" target="_blank">GitHub Repository ↗</a>
+                <a href="/docs" target="_blank">Swagger OpenAPI Docs ↗</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

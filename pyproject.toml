@@ -17,7 +17,7 @@ dependencies = [
     "pytesseract>=0.3.10",
     "opencv-python>=4.9.0",
     "pillow>=10.0.0",
-    "numpy>=1.24.0",
+    "numpy>=1.24.0,<2.0.0",
     "pydantic>=2.7.0",
     "fastapi>=0.110.0",
     "uvicorn>=0.29.0",
@@ -37,9 +37,14 @@ packages = [
     "docroute.provenance",
     "docroute.models",
     "docroute.api",
-    "docroute.cli"
+    "docroute.cli",
+    "docroute.web"
 ]
+
+[tool.setuptools.package-data]
+"docroute.web" = ["static/*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
+

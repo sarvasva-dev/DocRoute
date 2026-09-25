@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: docroute-engine
+    env: docker
+    dockerfilePath: Dockerfile
+    dockerContext: .
+    plan: starter
+    region: oregon
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: TESSERACT_CMD
+        value: /usr/bin/tesseract

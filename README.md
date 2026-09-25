@@ -16,11 +16,99 @@ Rather than acting as a naive PyMuPDF wrapper or static OCR caller, **DocRoute**
 - **Table Extractor**: Bounded and borderless table detection using PyMuPDF grid analysis returning structured 2D matrices and cell coordinates.
 - **Page-Level Provenance**: Full traceability mapping every extracted string to page number, bounding box `[x0, y0, x1, y1]`, source element type, engine, and routing reasoning.
 - **FastAPI Microservice**: Production REST API endpoints with Pydantic v2 schemas, OpenAPI specs, file validation, and visual debug rendering.
+- **Interactive Web Dashboard**: Glassmorphism UI mounted at `/dashboard/` for file uploads, bounding box canvas overlays, table matrix inspectors, scan likelihood gauges, quality reports, and interactive API code generators.
+- **Render.com Cloud Ready**: Native `Dockerfile` and `render.yaml` infrastructure-as-code for zero-downtime deployment on Render.
 - **Unified CLI Tool**: Command-line interface (`docroute inspect`, `docroute extract`, `docroute profile`, `docroute ocr`) sharing identical engine logic with the API.
 
 ---
 
+## Web Dashboard & Interactive Inspector
+
+DocRoute includes a standalone, high-performance web interface mounted directly at `/dashboard/` when running the microservice.
+
+### Key Web Features:
+1. **Drag-and-Drop Uploader**: Upload PDF documents or images with customizable scan likelihood thresholds, OCR language engines (`eng`, `hin`, `eng+hin`), force OCR toggles, and table extraction controls.
+2. **Spatial Bounding Box Canvas**: Renders uploaded pages onto an interactive HTML5 canvas with color-coded bounding box overlays (blue = vector native, green = OCR, purple = table grid) and real-time hover tooltips.
+3. **Visual Debug Stream**: Live streams server-side annotated debug overlay images from `/documents/{id}/debug/{page_num}`.
+4. **Table Matrix Grid Inspector**: Renders extracted 2D table matrices into formatted HTML grids with 1-click **Copy to JSON** and **Copy to CSV** export functions.
+5. **Quality & Provenance Stream**: Displays detailed quality metrics (`ocr_confidence`, `formatting_density`, `garbage_ratio`) alongside a line-by-line spatial provenance log table.
+6. **API Code Generator**: Interactive code snippet switcher providing ready-to-copy request code in **cURL**, **Python (requests)**, **JavaScript (fetch)**, and **Node.js (axios)**.
+
+---
+
+## Render.com Cloud Deployment
+
+DocRoute is fully prepared for containerized cloud deployment on **Render.com** using Docker with preinstalled Tesseract OCR (English + Hindi) and system OpenCV dependencies.
+
+### Option 1: Render Infrastructure-as-Code (Recommended)
+1. Fork or push your code to your GitHub repository: `https://github.com/sarvasva-dev/DocRoute`.
+2. In your Render Dashboard, select **New +** -> **Blueprint**.
+3. Connect your repository. Render will automatically detect `render.yaml` and provision the Web Service.
+
+### Option 2: Manual Render Web Service Setup
+1. Create a **New Web Service** on Render.
+2. Connect your GitHub repository: `https://github.com/sarvasva-dev/DocRoute`.
+3. Select Environment: **Docker**.
+4. Set **Dockerfile Path**: `./Dockerfile`.
+5. Set Environment Variables:
+   - `PORT`: `8000`
+   - `TESSERACT_CMD`: `/usr/bin/tesseract`
+6. Click **Deploy Web Service**.
+
+---
+
+## API Microservice & Endpoints
+
+### Launching Locally
+```bash
+python -m docroute.api.app
+# Server runs at http://localhost:8000
+# Web Dashboard: http://localhost:8000/dashboard/
+# OpenAPI Specs:  http://localhost:8000/docs
+```
+
+### Exposed API Endpoints
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/documents` | Upload & process document (`.pdf`, `.png`, `.jpg`, `.tiff`, `.webp`). Returns `StructuredDocument`. |
+| `GET` | `/documents/{id}` | Retrieve full structured document model payload by ID. |
+| `GET` | `/documents/{id}/profile` | Retrieve layout profile, native text density, and scan likelihood score. |
+| `GET` | `/documents/{id}/pages` | Retrieve list of page extractions with bounding boxes and line tokens. |
+| `GET` | `/documents/{id}/text` | Retrieve aggregated plain text across all document pages. |
+| `GET` | `/documents/{id}/tables` | Retrieve all extracted 2D table matrices across document pages. |
+| `GET` | `/documents/{id}/quality` | Retrieve document extraction quality assessment metrics. |
+| `GET` | `/documents/{id}/debug/{page_num}` | Download/stream visual debug annotated page overlay PNG image. |
+
+### Example API Request (cURL)
+```bash
+curl -X 'POST' \
+  'http://localhost:8000/documents?ocr_threshold=0.5&force_ocr=false&language=eng%2Bhin&extract_tables=true' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: multipart/form-data' \
+  -F 'file=@sample.pdf'
+```
+
+---
+
+## Docker Local Execution
+
+You can build and run DocRoute locally in Docker using the included `Dockerfile`:
+
+```bash
+# Build Docker image
+docker build -t docroute-engine .
+
+# Run Docker container
+docker run -d -p 8000:8000 --name docroute docroute-engine
+
+# Access Dashboard at http://localhost:8000/dashboard/
+```
+
+---
+
 ## Architecture
+
 
 ```
                     PDF / IMAGE
