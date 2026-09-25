@@ -122,12 +122,13 @@ async def readiness_check():
         }
     }
 
-@app.get("/", tags=["Health"])
+@app.get("/", tags=["UI"])
 async def root_entrypoint(request: Request):
-    """Root endpoint: Redirects browser requests to interactive dashboard or returns JSON service metadata."""
+    """Root endpoint: Serves interactive Web UI directly or returns API metadata."""
     accept_header = request.headers.get("accept", "")
-    if "text/html" in accept_header and os.path.exists(STATIC_DIR):
-        return RedirectResponse(url="/dashboard/")
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if "text/html" in accept_header and os.path.exists(index_path):
+        return FileResponse(index_path)
     return {
         "service": "docroute-api",
         "tagline": "Adaptive Document Intelligence API",
@@ -138,6 +139,20 @@ async def root_entrypoint(request: Request):
         "health_check": "/health",
         "readiness_check": "/ready"
     }
+
+@app.get("/style.css", include_in_schema=False)
+async def serve_style():
+    style_path = os.path.join(STATIC_DIR, "style.css")
+    if os.path.exists(style_path):
+        return FileResponse(style_path, media_type="text/css")
+    return Response(status_code=404)
+
+@app.get("/app.js", include_in_schema=False)
+async def serve_js():
+    js_path = os.path.join(STATIC_DIR, "app.js")
+    if os.path.exists(js_path):
+        return FileResponse(js_path, media_type="application/javascript")
+    return Response(status_code=404)
 
 if __name__ == "__main__":
     import uvicorn
