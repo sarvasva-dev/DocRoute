@@ -38,6 +38,7 @@ def extract_cmd(args: argparse.Namespace) -> None:
     opts = ProcessingOptions(
         ocr_threshold=args.threshold,
         force_ocr=args.force_ocr,
+        vision=getattr(args, "vision", "akshar"),
         language=args.lang,
         extract_tables=not args.no_tables
     )
@@ -63,6 +64,7 @@ def ocr_cmd(args: argparse.Namespace) -> None:
     """CLI ocr command: forces OCR processing on target document."""
     opts = ProcessingOptions(
         force_ocr=True,
+        vision=getattr(args, "vision", "akshar"),
         language=args.lang,
         extract_tables=not args.no_tables
     )
@@ -100,6 +102,7 @@ def main() -> None:
     p_extract.add_argument("file_path", help="Path to target PDF or image file")
     p_extract.add_argument("--threshold", type=float, default=0.5, help="OCR quality threshold (default: 0.5)")
     p_extract.add_argument("--force-ocr", action="store_true", help="Force OCR on all pages")
+    p_extract.add_argument("--vision", choices=["akshar", "mirage", "tesseract"], default="akshar", help="Vision/OCR fallback engine (default: akshar)")
     p_extract.add_argument("--lang", default="eng", help="OCR language (e.g. eng, hin, eng+hin)")
     p_extract.add_argument("--no-tables", action="store_true", help="Disable table extraction")
     p_extract.add_argument("--json", action="store_true", help="Output full structured document as JSON")
@@ -108,6 +111,7 @@ def main() -> None:
     # ocr
     p_ocr = subparsers.add_parser("ocr", help="Force OCR processing on document")
     p_ocr.add_argument("file_path", help="Path to target PDF or image file")
+    p_ocr.add_argument("--vision", choices=["akshar", "mirage", "tesseract"], default="akshar", help="Vision/OCR engine (default: akshar)")
     p_ocr.add_argument("--lang", default="eng", help="OCR language (e.g. eng, hin, eng+hin)")
     p_ocr.add_argument("--no-tables", action="store_true", help="Disable table extraction")
     p_ocr.add_argument("--json", action="store_true", help="Output full structured document as JSON")

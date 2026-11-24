@@ -15,6 +15,8 @@ from docroute.models.api import ProcessingOptions
 from docroute.core.profiler import DocumentProfiler
 from docroute.extractors.native import NativePDFExtractor
 from docroute.extractors.ocr import OCRExtractor
+from docroute.extractors.akshar import AksharExtractor
+from docroute.extractors.mirage import MirageExtractor
 from docroute.extractors.tables import TableExtractor
 from docroute.routing.quality import QualityAssessor
 from docroute.routing.router import OCRRouter
@@ -33,8 +35,20 @@ class DocRouteEngine:
         self.profiler = DocumentProfiler()
         self.native_extractor = NativePDFExtractor()
         self.ocr_extractor = OCRExtractor()
+        self.akshar_extractor = AksharExtractor()
+        self.mirage_extractor = MirageExtractor()
         self.table_extractor = TableExtractor()
         self.router = OCRRouter(default_threshold=self.options.ocr_threshold)
+
+    def _get_fallback_extractor(self, vision_mode: str) -> BaseExtractor:
+        """Selects OCR/Vision extractor based on vision mode ('akshar', 'mirage', 'tesseract')."""
+        mode = (vision_mode or "akshar").lower()
+        if mode == "mirage":
+            return self.mirage_extractor
+        elif mode == "tesseract":
+            return self.ocr_extractor
+        else:
+            return self.akshar_extractor
 
     def process_document(
         self, file_path: str, options_override: Optional[ProcessingOptions] = None
@@ -73,12 +87,15 @@ class DocRouteEngine:
                 p_num = p_prof.page_number
                 page_area = max(1.0, p_prof.width * p_prof.height)
 
+                # Fallback extractor (akshar by default, mirage, or tesseract)
+                fallback_ext = self._get_fallback_extractor(opts.vision)
+
                 # Force OCR check
                 if opts.force_ocr:
-                    logger.info(f"Page {p_num}: Force OCR enabled.")
-                    page_ext = self.ocr_extractor.extract_page(file_path, p_num, p_prof)
+                    logger.info(f"Page {p_num}: Force OCR enabled (engine: {opts.vision}).")
+                    page_ext = fallback_ext.extract_page(file_path, p_num, p_prof)
                     page_ext.quality.fallback_triggered = True
-                    page_ext.quality.reasoning = "Force OCR enabled by caller."
+                    page_ext.quality.reasoning = f"Force OCR enabled by caller ({opts.vision})."
                     fallback_counts += 1
                 else:
                     # Native Extraction
@@ -93,8 +110,8 @@ class DocRouteEngine:
                     )
 
                     if should_ocr:
-                        logger.info(f"Page {p_num}: Invoking OCR fallback. ({route_reasoning})")
-                        page_ext = self.ocr_extractor.extract_page(file_path, p_num, p_prof)
+                        logger.info(f"Page {p_num}: Invoking fallback ({opts.vision}). ({route_reasoning})")
+                        page_ext = fallback_ext.extract_page(file_path, p_num, p_prof)
                         page_ext.quality.fallback_triggered = True
                         page_ext.quality.reasoning = route_reasoning
                         fallback_counts += 1

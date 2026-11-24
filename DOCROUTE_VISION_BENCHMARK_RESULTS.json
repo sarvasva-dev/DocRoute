@@ -1,0 +1,199 @@
+[
+  {
+    "name": "3-Page Hybrid Smoke Baseline",
+    "filename": "real_sample_smoke.pdf",
+    "akshar": {
+      "wall_ms": 1555.95,
+      "page_count": 3,
+      "methods": [
+        "native",
+        "ocr",
+        "native"
+      ],
+      "engines": [
+        "pymupdf-native",
+        "akshar/fast_document_tsv",
+        "pymupdf-native"
+      ],
+      "text_length": 133,
+      "full_text": "DocRoute Lite \u00b7 Smoke Test\nINVOICE VENDOR Apex Services\nInvoice Date: 2026-11-24\nTotal amount due: 12345 rupees.\nMonthly Sales Report",
+      "total_tables": 1,
+      "avg_quality": 0.687,
+      "error": null
+    },
+    "mirage": {
+      "wall_ms": 1718.22,
+      "page_count": 3,
+      "methods": [
+        "native",
+        "vision",
+        "native"
+      ],
+      "engines": [
+        "pymupdf-native",
+        "cactus_mirage",
+        "pymupdf-native"
+      ],
+      "text_length": 128,
+      "full_text": "DocRoute Lite \u00b7 Smoke Test\nINVOICEVENDOR Apex Services\nInvoice Date:2026-11-24\nTotalamountdue: 12345 rupees\nMonthly Sales Report",
+      "total_tables": 1,
+      "avg_quality": 0.651,
+      "error": null
+    },
+    "speedup": 1.1,
+    "akshar_total_found": true,
+    "mirage_total_found": true
+  },
+  {
+    "name": "Real GST Scanned Invoice",
+    "filename": "real_inv_01.png",
+    "akshar": {
+      "wall_ms": 1205.6,
+      "page_count": 1,
+      "methods": [
+        "ocr"
+      ],
+      "engines": [
+        "akshar/fast_document_tsv"
+      ],
+      "text_length": 755,
+      "full_text": "INVOICE NO: INV-120152\nINVOICE Date: 03-12-2017\nNo: REF-78445\nReference\nTotal:\nRs.1,24,200\nABCD TECHONOLOGIES\nSTATE KERALA (09)\nPAN B76C238B7E\nPIN 683584\nEMAIL xyz@gmail.com\nPhone: +918189457845\nTAX INVOICE\nBilling Address,\nShipping Address,\nino Shaji\nJino Shaji\nAddress ABCDEFGD\nAddress ABCDEFGD HOUSE,IX/642-D\nABCDEFGD P.0., NEDUMBASSERY\nABCDEFGD P.O., NEDUMBASSERY\n\u2018COCHIN\nCOCHIN\nSTATE KERALA (09)\nSTATE KERALA (09)\nPIN 683584\nPIN 683584\nEMAIL abcd@gmail.com\nEMAIL\nPhone: 4918189457845\nPhone: +918189457845\n\u2018SAMSUNG GALAXY 8 PLUS 64GB HSNCODE: 330854040\n2 0 1 2 2 0 2 180\n\u2018SAMSUNG GALAXY 8 PLUS 64GB HSNCODE: 330854040\n2 0 wo 2 2% 0 2% 180\n\u2018SAMSUNG GALAXY S8 PLUS 64GB HSNCODE: 330854040\n2 0\n2 20 0 2 180\nShaw\n2 0 wo 2 2% 0 2% 180\nShaw\n2 0\n2 20 0 2 180",
+      "total_tables": 0,
+      "avg_quality": 0.76,
+      "error": null
+    },
+    "mirage": {
+      "wall_ms": 1852.77,
+      "page_count": 1,
+      "methods": [
+        "vision"
+      ],
+      "engines": [
+        "cactus_mirage"
+      ],
+      "text_length": 307,
+      "full_text": "INVOICE NO:\nINV-120152\nPIN\nSTATE\nB76C238B7E\nBilling Addres\nGSTIN 37B76C238B7EIzs\nTAX INVOICE\n37B76C238B7EIZ\nSTATE\nCOCHIN\nABCDEFGD P.O, NEDUMBASSER\nAddress\nSTATE\ncOCHIN\nABCDEFGDP.O, NEDUMBASSE\nEMAIL\nabed@gmail.com\nProduct\nShaw\nAMSUNG GALAXY s8 PLUs 64GB HSNCODE: 330854040\n10\n12\n12\n120\n120\n20\n20\n0\n20\n180\n180",
+      "total_tables": 0,
+      "avg_quality": 0.75,
+      "error": null
+    },
+    "speedup": 1.5,
+    "akshar_total_found": false,
+    "mirage_total_found": false
+  },
+  {
+    "name": "Real Multi-Page GST PDF",
+    "filename": "real_inv_04.pdf",
+    "akshar": {
+      "wall_ms": 311.19,
+      "page_count": 1,
+      "methods": [
+        "native"
+      ],
+      "engines": [
+        "pymupdf-native"
+      ],
+      "text_length": 42,
+      "full_text": "TAX INVOICE\nGOODS AND SERVICES TAX INVOICE",
+      "total_tables": 1,
+      "avg_quality": 0.786,
+      "error": null
+    },
+    "mirage": {
+      "wall_ms": 256.3,
+      "page_count": 1,
+      "methods": [
+        "native"
+      ],
+      "engines": [
+        "pymupdf-native"
+      ],
+      "text_length": 42,
+      "full_text": "TAX INVOICE\nGOODS AND SERVICES TAX INVOICE",
+      "total_tables": 1,
+      "avg_quality": 0.786,
+      "error": null
+    },
+    "speedup": 0.8,
+    "akshar_total_found": false,
+    "mirage_total_found": false
+  },
+  {
+    "name": "Real Bank Statement Scan",
+    "filename": "real_stmt_01.pdf",
+    "akshar": {
+      "wall_ms": 1077.62,
+      "page_count": 2,
+      "methods": [
+        "native",
+        "native"
+      ],
+      "engines": [
+        "pymupdf-native",
+        "pymupdf-native"
+      ],
+      "text_length": 129,
+      "full_text": "[IVW_306017_10.83.32.120_20190806145520]\n29-07-2019\nUPI/921024499579/Payment from Ph/gopalsoni88@ybl/H\n0.00\n2,000.00\n26,314.45 Cr",
+      "total_tables": 3,
+      "avg_quality": 0.888,
+      "error": null
+    },
+    "mirage": {
+      "wall_ms": 1079.17,
+      "page_count": 2,
+      "methods": [
+        "native",
+        "native"
+      ],
+      "engines": [
+        "pymupdf-native",
+        "pymupdf-native"
+      ],
+      "text_length": 129,
+      "full_text": "[IVW_306017_10.83.32.120_20190806145520]\n29-07-2019\nUPI/921024499579/Payment from Ph/gopalsoni88@ybl/H\n0.00\n2,000.00\n26,314.45 Cr",
+      "total_tables": 3,
+      "avg_quality": 0.888,
+      "error": null
+    },
+    "speedup": 1.0,
+    "akshar_total_found": false,
+    "mirage_total_found": false
+  },
+  {
+    "name": "Real SROIE Thermal Receipt",
+    "filename": "real_rcpt_002.jpg",
+    "akshar": {
+      "wall_ms": 1160.59,
+      "page_count": 1,
+      "methods": [
+        "ocr"
+      ],
+      "engines": [
+        "akshar/fast_document_tsv"
+      ],
+      "text_length": 693,
+      "full_text": "tan woon yann\nMR O.1.\u00a5. (JOHOR) SDN BHD\n(CO.REG :933109-x)\nLOT 1851-A & 1851-B, JALAN KPB 6,\nKAWASAN PERINDUSTRIAN BALAKONG ,\n43300 SERI KEMBANGAN, SELANGOR\n(MR DIY TESCO TERBAU)\n~INVOICE~\nCHOPPING BOARO 35.5x25.5CM 803M#\nEZiOHDOS - 24\n8970669\n1X 19.00 19.00\nAIR PRESSURE SPRAYER SX-\u00a775-1 1.5L\nHCO3-7 - 15\n9066468\n8.02 8.02\nWAXCO WINDSHILED\n120ML\nWAI4-3A - 48\n8557031100236\n1X 3.02 3.02\nBOPP TAPE 48MM*100M CLEAR\nFZ-04 - 36\n6935818350846\n1X 3.88 3,88\nItem(s) 4\n:\nQty(s) : 4\n92\nTOTAL\nRM 33,\nROUNDING\n-RM 0.02\nTOTAL ROUNDED\nRH 33,90\nCASH\nRM 50.00\nCHANGE\nRM 16.10\n12-01-19 21:13 ZKO9 14 RO00027830\nOPERATOR TRAINEE CASHIER\nEXCHANGE ARE ALLOWED WITHIN\n7 DAYS WITH RECEIPT.\nSTRICTLY NO CASH REFUND.",
+      "total_tables": 0,
+      "avg_quality": 0.851,
+      "error": null
+    },
+    "mirage": {
+      "wall_ms": 1510.34,
+      "page_count": 1,
+      "methods": [
+        "vision"
+      ],
+      "engines": [
+        "cactus_mirage"
+      ],
+      "text_length": 391,
+      "full_text": "tan woon yann\nMR D.I.Y. (JOHOR) SDN BHD\n1851-A& 1851-B. JALAN KP\nSERI KEMBANGAN, SEL\n-INVoICE\nEZ10HD05\n24\nAIR PRESSURE SPRAYER SX-575-1 1.5L\n9066468\nHCO3-7-15\nAXCO WINDSHILED CLEANER 120ML\n8.02\n9557031100236\n1X\n3.02\n3.02\nFZ-04\n6935818350846\n1X3.88\n3.88\nTOTAL\nRM 33.92\nRM 33.9\nCHANGE\nOPERATOR\n2-01-19 21:13 SH01 ZK\nATOR TRAINEE CASH\nRO00027830\n7 DAYS WITH RECEIPT.\nEXCHANGE ARE ALLOWED WITHIN",
+      "total_tables": 0,
+      "avg_quality": 0.75,
+      "error": null
+    },
+    "speedup": 1.3,
+    "akshar_total_found": false,
+    "mirage_total_found": false
+  }
+]

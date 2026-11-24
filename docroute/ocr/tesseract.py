@@ -32,6 +32,18 @@ class TesseractOCREngine:
             pytesseract.pytesseract.tesseract_cmd = self.tesseract_cmd
 
         env_tessdata = os.environ.get("TESSDATA_PREFIX")
+        if not tessdata_dir and not env_tessdata:
+            candidates = [
+                "/home/sarvasva/Desktop/minor project/mirage ai/assets/tessdata",
+                os.path.expanduser("~/.local/share/tessdata"),
+                "/usr/share/tesseract-ocr/5/tessdata",
+                "/usr/share/tesseract-ocr/4.00/tessdata",
+                "/usr/share/tessdata",
+            ]
+            for c in candidates:
+                if os.path.isfile(os.path.join(c, "eng.traineddata")):
+                    env_tessdata = c
+                    break
         self.tessdata_dir = tessdata_dir or env_tessdata
 
         self.is_available = self._check_availability()

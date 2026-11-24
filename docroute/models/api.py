@@ -10,6 +10,7 @@ class ProcessingOptions(BaseModel):
     """Configuration options for processing requests."""
     ocr_threshold: float = Field(0.5, description="Quality score threshold below which OCR is invoked")
     force_ocr: bool = Field(False, description="Force OCR execution on all pages regardless of quality")
+    vision: str = Field("akshar", description="Vision OCR engine: 'akshar' (default), 'mirage', or 'tesseract'")
     language: str = Field("eng", description="Primary OCR language (e.g. eng, hin, eng+hin)")
     extract_tables: bool = Field(True, description="Enable table extraction")
     visual_debug: bool = Field(False, description="Enable visual debug image generation")
